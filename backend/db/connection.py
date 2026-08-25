@@ -46,3 +46,20 @@ class CognoDB:
     except Exception as e:
       print(f"[ERROR] Query failed: {e}")
       raise
+
+  def execute_batch(self, query, parameters=None):
+    """
+    Executes a parameterized Cypher batch query (typically with UNWIND)
+    and returns the SummaryCounters object (nodes_created, relationships_created, etc.).
+    """
+    if not self.driver:
+      raise ConnectionError("Database driver is not initialized.")
+
+    try:
+      with self.driver.session() as session:
+        result = session.run(query, parameters or {})
+        summary = result.consume()      # Exhausts the stream and releases resources
+        return summary.counters         # Returns SummaryCounters object
+    except Exception as e:
+        print(f"[ERROR] Batch query failed: {e}")
+        raise

@@ -18,12 +18,11 @@ class CognoDB:
       # Verify connectivity
       with self.driver.session() as session:
         session.run("RETURN 1")
-        # current_app.logger.info("Database Connection Successful")
+        current_app.logger.info("Database Connection Successful")
 
       return True
     except Exception as e:
-      # current_app.logger.error("Connection Failed", exc_info=e)
-      print(f"[ERROR] Connection failed: {e}")
+      current_app.logger.error("Connection Failed", exc_info=e)
       return False
 
   def close(self):
@@ -44,7 +43,7 @@ class CognoDB:
         # Convert to list of dicts for easy JSON serialization
         return [record.data() for record in result]
     except Exception as e:
-      print(f"[ERROR] Query failed: {e}")
+      current_app.logger.error("Query failed", exc_info=e)
       raise
 
   def execute_batch(self, query, parameters=None):
@@ -61,5 +60,5 @@ class CognoDB:
         summary = result.consume()      # Exhausts the stream and releases resources
         return summary.counters         # Returns SummaryCounters object
     except Exception as e:
-        print(f"[ERROR] Batch query failed: {e}")
-        raise
+      current_app.logger.error("Batch query failed", exc_info=e)
+      raise

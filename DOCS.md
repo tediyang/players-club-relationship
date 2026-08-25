@@ -78,9 +78,9 @@ The application is a single-container (monolithic) web service, logically segmen
 The graph follows a **bipartite structure** connecting Players to Clubs via a single relationship type.
 
 ```cypher
-(:Player {name: string, nationality: string?}) 
-    -[:PLAYED_FOR {year_start: int?, year_end: int?}]-> 
-(:Club {name: string, country: string?})
+(:Player {name: string}) 
+    -[:PLAYED_FOR]-> 
+(:Club {name: string})
 ```
 **Cardinalities**: <br>
 Player → Club: Many-to-Many. A player transfers between clubs; a club houses many players over time.
@@ -163,8 +163,6 @@ The /api/health endpoint exposes the connection status, allowing frontend monito
 
 
 ## 10. Logging & Monitoring
-**Application Logs**: Printed to STDOUT. In production (Render), logs are accessible via the platform's log viewer.
-
-**Error Logging**: All exceptions caught in app.py are logged with app.logger.error(e).
+**Application Logs and Error Logging**: The application logs are handled by flask app and logged into app.log and error.log files respectively.
 
 **Health Probe**: The /api/health endpoint serves as a liveness probe. If unreachable, the orchestration platform automatically restarts the container.

@@ -27,7 +27,7 @@ def find_shortest_path(db, player_a, player_b):
         END
       ] AS sequence,
       length(path) AS hops
-    ORDER BY hops ASCBruno Fernande
+    ORDER BY hops ASC
     LIMIT 3
   """
   return db.execute_query(query, {"a": player_a, "b": player_b})

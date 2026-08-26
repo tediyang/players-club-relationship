@@ -3,6 +3,11 @@ import os
 import logging
 from logging.handlers import RotatingFileHandler
 from db.connection import CognoDB
+from db.queries import (
+  find_shortest_path,
+  find_indirect_alumnus,
+  get_largest_squads,
+)
 
 # Setup file logging
 def setup_logging(app):
@@ -68,7 +73,80 @@ def health():
   return jsonify({"database_connected": db_ready})
 
 
+# ================================================================
+# SHORTEST PATH ENDPOINT
+# ================================================================
+@app.route("/api/path")
+def get_path():
+  if not db_ready:
+    return jsonify({"error": "Database is not reachable."}), 503
+
+  player_a = request.args.get("player1", "").strip()
+  player_b = request.args.get("player2", "").strip()
+
+  if not player_a or not player_b:
+    return jsonify({"error": "Please provide both player1 and player2."}), 400
+
+  try:
+    results = find_shortest_path(db, player_a, player_b)
+    if not results:
+      return jsonify(
+        {
+          "message": f"No connection found between {player_a} and {player_b}.",
+          "results": [],
+        }
+      )
+    return jsonify({"results": results})
+  except Exception as e:
+    app.logger.error(f"Path query error: {e}")
+    return jsonify({"error": "An internal server error occurred."}), 500
+
+
+# ================================================================
+# INDIRECT TEAMMATES ENDPOINT
+# ================================================================
+@app.route("/api/indirect")
+def get_indirect():
+  if not db_ready:
+    return jsonify({"error": "Database is not reachable."}), 503
+
+  star = request.args.get("player", "").strip()
+  exclude = request.args.get("exclude", "").strip()
+
+  if not star or not exclude:
+    return jsonify({"error": "Provide both 'player' and 'exclude' (club name)."}), 400
+
+  try:
+    results = find_indirect_alumnus(db, star, exclude)
+    if not results:
+      return jsonify(
+        {
+          "message": f"No distant teammates found for {star} excluding {exclude}.",
+          "results": [],
+        }
+      )
+    return jsonify({"results": results})
+  except Exception as e:
+    app.logger.error(f"Indirect query error: {e}")
+    return jsonify({"error": "An internal server error occurred."}), 500
+
+
+# ================================================================
+# LARGEST SQUADS ENDPOINT
+# ================================================================
+@app.route("/api/squads")
+def get_squads():
+  if not db_ready:
+    return jsonify({"error": "Database is not reachable."}), 503
+
+  try:
+    results = get_largest_squads(db)
+    return jsonify({"results": results})
+  except Exception as e:
+    app.logger.error(f"Squad query error: {e}")
+    return jsonify({"error": "An internal server error occurred."}), 500
+
+
 if __name__ == "__main__":
-  # We attempt connection immediately for local dev convenience
-  # but the app will handle errors gracefully via the API health checks.
+  # The app will handle errors gracefully via the API health checks.
   app.run(debug=True, host="0.0.0.0", port=5000)

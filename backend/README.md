@@ -68,6 +68,8 @@ COGNODB_PASSWORD=your-super-secret-password
 ```
 
 ### **Setup & Run (backend)**
+**Perequisite**: <br>
+You should have python3 installed on your system. If you don't have go to [python3](https://www.python.org/downloads/) and follow the installation step up.
 
 1. Create a Python virtual environment and install dependencies
 

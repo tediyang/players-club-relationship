@@ -200,8 +200,9 @@ export default function ExplorerPage() {
             </span>
           </div>
           <p className="mb-4 text-sm leading-6 text-slate-300">
-            Look for distant players connected to a star player through
-            teammates from another club.
+            Find players who share a club connection with an alumnus 
+            of any club "star player" has played for, but have never 
+            played for "excluded club".
           </p>
 
           <form className="space-y-4" onSubmit={submitIndirect}>

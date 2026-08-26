@@ -64,6 +64,8 @@ cd frontend
 npm install
 ```
 
+Create a .env file from the .example.env. For a live deploy backend service, input the url and change the environment from development to production. If not, leave the .env file with the default values.
+
 ## Run in development mode
 
 ```bash

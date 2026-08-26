@@ -1,4 +1,7 @@
 def find_shortest_path(db, player_a, player_b):
+  """
+    Find the shortest path to show the relationship between two players
+  """
   query = """
     // Find the top 1 match for player A
     CALL db.index.fulltext.queryNodes('player_names', $a)

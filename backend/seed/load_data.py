@@ -4,7 +4,7 @@ from datetime import datetime
 from db.connection import CognoDB
 
 
-BATCH_SIZE = 200          # Players per batch
+BATCH_SIZE = 200 # Players per batch
 CSV_PATH = "football_players_career_history.csv"
 
 def read_csv_in_batches(csv_path, batch_size):
@@ -36,6 +36,39 @@ def read_csv_in_batches(csv_path, batch_size):
 
     if current_batch:
       yield current_batch
+      
+def ensure_fulltext_index(db):
+  """Creates the full-text index if it doesn't already exist."""
+  try:
+    db.execute_query(
+      """
+        CREATE FULLTEXT INDEX player_names
+        FOR (p:Player)
+        ON EACH [p.name]
+      """
+    )
+    print("Full-text index 'player_names' created.")
+  except Exception as e:
+    if "already exists" in str(e).lower():
+      print("Full-text index 'player_names' already exists.")
+    else:
+      print(f"Could not create index: {e}")
+      
+  # Index for Clubs
+  try:
+    db.execute_query(
+      """
+        CREATE FULLTEXT INDEX club_names 
+        FOR (c:Club) 
+        ON EACH [c.name]
+      """
+    )
+    print("Full-text index 'club_names' created.")
+  except Exception as e:
+    if "already exists" in str(e).lower():
+      print("Full-text index 'club_names' already exists.")
+    else:
+      print(f"Could not create club_names index: {e}")
 
 def load_data_sync(csv_path, batch_size=200):
   """Loads data synchronously with batched UNWIND queries."""
@@ -51,8 +84,11 @@ def load_data_sync(csv_path, batch_size=200):
     return
 
   print("Connected to CognoDB successfully.\n")
+  
+  # 2. Ensure the full-text index exists (for autocomplete)
+  ensure_fulltext_index(db)
 
-  # 2. Read CSV into batches
+  # 3. Read CSV into batches
   batches = list(read_csv_in_batches(csv_path, batch_size))
   total_batches = len(batches)
 
@@ -64,7 +100,7 @@ def load_data_sync(csv_path, batch_size=200):
   print(f"Total batches to process: {total_batches}")
   print(f"Batch size: {batch_size} players\n")
 
-  # 3. Define the batch Cypher query (using UNWIND)
+  # 4. Define the batch Cypher query (using UNWIND)
   query = """
   UNWIND $batch AS row
   MERGE (p:Player {name: row.player})
@@ -74,7 +110,7 @@ def load_data_sync(csv_path, batch_size=200):
   MERGE (p)-[:PLAYED_FOR]->(c)
   """
 
-  # 4. Process each batch using the centralized execute_query method
+  # 5. Process each batch using the centralized execute_query method
   start_time = datetime.now()
   total_nodes = 0
   total_rels = 0

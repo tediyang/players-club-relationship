@@ -10,7 +10,7 @@ function App() {
           <div className="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-emerald-300 via-cyan-400 to-sky-500 font-black text-slate-950">
             P
           </div>
-          <div>
+          <div className="hidden md:block">
             <p className="text-sm font-semibold tracking-wide text-slate-50">
               Players Club
             </p>

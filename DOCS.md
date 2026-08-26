@@ -56,7 +56,7 @@ The application is a single-container (monolithic) web service, logically segmen
    - **Key Pattern**: State management via DOM manipulation; displays explicit Loading, Empty, and Error states.
 
 2. **API Gateway Layer** (Flask Routes)
-   - Exposes RESTful endpoints: `/api/path`, `/api/indirect`, `/api/squads`, `/api/health`, etc.
+   - Exposes RESTful endpoints: `/api/path`, `/api/indirect`, `/api/squads`, `/api/health`
    - Acts as the authentication/authorization boundary (minimal in this context).
    - Handles HTTP request/response serialization (JSON).
 
@@ -144,13 +144,13 @@ The /api/health endpoint exposes the connection status, allowing frontend monito
 
 **Missing Data**: If a player name does not exist in the graph, the query returns an empty list. The UI displays a custom "No connection found" empty state instead of a stack trace.
 
-**Timeout/Exception**: Wrapped in try/except blocks at the Route layer. Exceptions are logged to the server console, but the client receives a generic "Internal Server Error" (HTTP 500) to prevent exposing database internals.
+**Timeout/Exception**: Wrapped in try/except blocks at the Route layer. Exceptions are logged to the server log files, but the client receives a generic "Internal Server Error" (HTTP 500) to prevent exposing database internals.
 
 ## 9. Performance Optimization & Scaling Strategy
 ### 9.1 Query Optimization
-**Depth Limiting**: The path query limits will be set to *1..5. This prevents the traversal from exploding if the graph is highly connected (e.g., a player connected to 50 clubs). It also ensures predictable response times (< 200ms on c0 hardware).
+**Depth Limiting**: The path query limits will be set to *1..3. This prevents the traversal from exploding if the graph is highly connected (e.g., a player connected to 50 clubs). It also ensures predictable response times (< 200ms on c0 hardware).
 
-**Projection**: The query will only returns DISTINCT paths and limits the results to 3. This prevents overwhelming the frontend with hundreds of duplicate paths (especially in a dense network).
+**Projection**: The query will only returns DISTINCT paths and limits the results to 3 or 5 depending on endpoint limit. This prevents overwhelming the frontend with hundreds of duplicate paths (especially in a dense network).
 
 ### 9.2 Future Scalability (If the dataset expands to 1M+ nodes)
 **Indexing**: Move to composite indexes (e.g., (Player.name, Player.birth_year)).

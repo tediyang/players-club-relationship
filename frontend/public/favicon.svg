@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Players Club logo">
+  <defs>
+    <linearGradient id="brandGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6ee7b7" />
+      <stop offset="50%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#7dd3fc" />
+    </linearGradient>
+  </defs>
+
+  <rect width="64" height="64" rx="18" fill="url(#brandGradient)"/>
+  <path d="M22 15h13.5C42.95 15 49 21.05 49 28.5S42.95 42 35.5 42H28v8h-6V15zm6 6v21h7.5c4.14 0 7.5-3.36 7.5-7.5S39.64 21 35.5 21H28z" fill="#06131d"/>
+</svg>

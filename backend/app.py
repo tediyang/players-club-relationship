@@ -3,6 +3,7 @@ import os
 import logging
 from logging.handlers import RotatingFileHandler
 from db.connection import CognoDB
+from flask_cors import CORS
 from db.queries import (
   find_shortest_path,
   find_indirect_alumnus,
@@ -48,6 +49,8 @@ def setup_logging(app):
 
 app = Flask(__name__)
 setup_logging(app)
+# Allow requests from your frontend domain only
+CORS(app, resources={r"/api/*": {"origins": "https://players-club-relationship-web-app.onrender.com"}})
 db = CognoDB()
 
 # Global flag to track DB status

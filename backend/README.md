@@ -14,7 +14,7 @@ This document describes the backend for the Players-Club Relationship project: t
 ## **Use Case & Why a Graph Database?**
 
 - Use case: model professional football players and their relationships to clubs. The application needs to answer relationship-centric queries such as "which players played together at a club", "shortest connection (degrees) between two players through clubs and teammates" etc.
-- Why a graph DB: graphs are a natural fit for highly connected data. They express relationships as first-class citizens enabling fast traversal queries (neighborhood searches, pathfinding, pattern matching) which are inefficient in tabular relational joins. Graph databases make it simple and performant to run queries such as multi-hop traversals, shortest paths, and pattern matching for teams and transfers.
+- Why a graph DB: graphs are a natural fit for highly connected data. They express relationships as first-class citizens enabling fast traversal queries (neighborhood searches, pathfinding, pattern matching) which are inefficient in tabular relational joins. Graph databases make it simple and performant to run queries such as multi-hop traversals, shortest paths, and pattern matching for players which will require multiple joins and CTEs leading to very high operational cost in relational database.
 
 ## **Graph Data Model (conceptual)**
 

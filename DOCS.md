@@ -38,7 +38,7 @@ The following NFRs guided all technical decisions:
 | **Driver** | `neo4j` (Python) v5.14+ | Official driver ensures compatibility with Bolt protocol and supports connection pooling. |
 | **Backend** | **Flask** 2.3+ (Python 3.9+) | Lightweight WSGI framework. Minimal boilerplate; rapid development.|
 | **Frontend** | **ReactS (Vite) / TailwindCSS** | Uses Vite and TailwindCSS for styling |
-| **Deployment** | **Gunicorn** (WSGI) + **Render.com** | Gunicorn handles concurrent requests; platform free tiers offer automatic HTTPS and environment variable injection. |
+| **Deployment** | **Gunicorn** (Flask) + **Render.com** | Gunicorn handles concurrent requests; platform free tiers offer automatic HTTPS and environment variable injection. |
 | **Configuration** | `python-dotenv` | Standard 12-factor app configuration; separates code from runtime secrets. |
 
 ---

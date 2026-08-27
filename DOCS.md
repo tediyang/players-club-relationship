@@ -22,7 +22,7 @@ The following NFRs guided all technical decisions:
 
 | NFR | Constraint / Target | Justification |
 | :--- | :--- | :--- |
-| **Performance** | Sub-second response for path queries | Graph traversals (hops `*1..5`) are pointer-chasing operations; must execute faster than recursive SQL CTEs. |
+| **Performance** | Sub-second response for path queries | Graph traversals (hops `*1..3`) are pointer-chasing operations; must execute faster than recursive SQL CTEs. |
 | **Simplicity** | Minimal external dependencies | The stack must be easily explainable and debuggable. |
 | **Resilience** | Graceful degradation | The UI must not crash if the database is unreachable; it must display explicit "unavailable" states. |
 | **Security** | Zero credential leakage | Connection secrets must be strictly externalized to the runtime environment. |

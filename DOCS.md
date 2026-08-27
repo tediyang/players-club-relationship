@@ -153,8 +153,6 @@ The /api/health endpoint exposes the connection status, allowing frontend monito
 **Projection**: The query will only returns DISTINCT paths and limits the results to 3 or 5 depending on endpoint limit. This prevents overwhelming the frontend with hundreds of duplicate paths (especially in a dense network).
 
 ### 9.2 Future Scalability (If the dataset expands to 1M+ nodes)
-**Indexing**: Move to composite indexes (e.g., (Player.name, Player.birth_year)).
-
 **Read Replicas**: CognoDB supports followers; the Flask app could route read-heavy queries (like the path search) to replicas.
 
 **Caching**: Implement Redis cache for frequently queried player pairs (e.g., Messi-Ronaldo) to reduce database load.
@@ -165,4 +163,4 @@ The /api/health endpoint exposes the connection status, allowing frontend monito
 ## 10. Logging & Monitoring
 **Application Logs and Error Logging**: The application logs are handled by flask app and logged into app.log and error.log files respectively.
 
-**Health Probe**: The /api/health endpoint serves as a liveness probe. If unreachable, the orchestration platform automatically restarts the container.
+**Health Probe**: The /api/health endpoint serves as a liveness probe. If unreachable, the orchestration platform automatically restarts the app.
